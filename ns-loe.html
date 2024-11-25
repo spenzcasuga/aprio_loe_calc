@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Work Effort Calculator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            padding: 20px;
+        }
+
+        h1,
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            margin: 20px auto;
+            width: 90%;
+            max-width: 1000px;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #eee;
+        }
+
+        th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+
+        td input {
+            width: 50px;
+            text-align: center;
+        }
+
+        button {
+            padding: 5px 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        td .quantity-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        td .quantity-container input {
+            width: 50px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Work Effort Calculator</h1>
+
+    <h2>SuiteCloud x Estimated Hours</h2>
+    <table id="suiteCloudTable">
+        <thead>
+            <tr>
+                <th>Script Type</th>
+                <th>Orbital Hours</th>
+                <th>Orbital Qty</th>
+                <th>Lunar Hours</th>
+                <th>Lunar Qty</th>
+                <th>Galactic Hours</th>
+                <th>Galactic Qty</th>
+                <th>Total Hours</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Client Script</td>
+                <td>10</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('orbital_clientScript', -1)">-</button>
+                        <input type="number" id="orbital_clientScript" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('orbital_clientScript', 1)">+</button>
+                    </div>
+                </td>
+                <td>20</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('lunar_clientScript', -1)">-</button>
+                        <input type="number" id="lunar_clientScript" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('lunar_clientScript', 1)">+</button>
+                    </div>
+                </td>
+                <td>35</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('galactic_clientScript', -1)">-</button>
+                        <input type="number" id="galactic_clientScript" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('galactic_clientScript', 1)">+</button>
+                    </div>
+                </td>
+                <td id="total_clientScript">0</td>
+            </tr>
+            <tr>
+                <td>User Event</td>
+                <td>10</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('orbital_userEvent', -1)">-</button>
+                        <input type="number" id="orbital_userEvent" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('orbital_userEvent', 1)">+</button>
+                    </div>
+                </td>
+                <td>20</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('lunar_userEvent', -1)">-</button>
+                        <input type="number" id="lunar_userEvent" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('lunar_userEvent', 1)">+</button>
+                    </div>
+                </td>
+                <td>35</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('galactic_userEvent', -1)">-</button>
+                        <input type="number" id="galactic_userEvent" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('galactic_userEvent', 1)">+</button>
+                    </div>
+                </td>
+                <td id="total_userEvent">0</td>
+            </tr>
+            <tr>
+                <td>Suitelet</td>
+                <td>15</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('orbital_suitelet', -1)">-</button>
+                        <input type="number" id="orbital_suitelet" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('orbital_suitelet', 1)">+</button>
+                    </div>
+                </td>
+                <td>25</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('lunar_suitelet', -1)">-</button>
+                        <input type="number" id="lunar_suitelet" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('lunar_suitelet', 1)">+</button>
+                    </div>
+                </td>
+                <td>37</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('galactic_suitelet', -1)">-</button>
+                        <input type="number" id="galactic_suitelet" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('galactic_suitelet', 1)">+</button>
+                    </div>
+                </td>
+                <td id="total_suitelet">0</td>
+            </tr>
+            <tr>
+                <td>Scheduled Script</td>
+                <td>15</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('orbital_scheduledScript', -1)">-</button>
+                        <input type="number" id="orbital_scheduledScript" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('orbital_scheduledScript', 1)">+</button>
+                    </div>
+                </td>
+                <td>28</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('lunar_scheduledScript', -1)">-</button>
+                        <input type="number" id="lunar_scheduledScript" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('lunar_scheduledScript', 1)">+</button>
+                    </div>
+                </td>
+                <td>40</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('galactic_scheduledScript', -1)">-</button>
+                        <input type="number" id="galactic_scheduledScript" value="0" min="0"
+                            onchange="updateTotals()" />
+                        <button onclick="adjustQty('galactic_scheduledScript', 1)">+</button>
+                    </div>
+                </td>
+                <td id="total_scheduledScript">0</td>
+            </tr>
+            <tr>
+                <td>Map/Reduce Script</td>
+                <td>18</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('orbital_mapReduce', -1)">-</button>
+                        <input type="number" id="orbital_mapReduce" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('orbital_mapReduce', 1)">+</button>
+                    </div>
+                </td>
+                <td>30</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('lunar_mapReduce', -1)">-</button>
+                        <input type="number" id="lunar_mapReduce" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('lunar_mapReduce', 1)">+</button>
+                    </div>
+                </td>
+                <td>45</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('galactic_mapReduce', -1)">-</button>
+                        <input type="number" id="galactic_mapReduce" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('galactic_mapReduce', 1)">+</button>
+                    </div>
+                </td>
+                <td id="total_mapReduce">0</td>
+            </tr>
+            <tr>
+                <td>RESTlet</td>
+                <td>20</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('orbital_restlet', -1)">-</button>
+                        <input type="number" id="orbital_restlet" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('orbital_restlet', 1)">+</button>
+                    </div>
+                </td>
+                <td>32</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('lunar_restlet', -1)">-</button>
+                        <input type="number" id="lunar_restlet" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('lunar_restlet', 1)">+</button>
+                    </div>
+                </td>
+                <td>50</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('galactic_restlet', -1)">-</button>
+                        <input type="number" id="galactic_restlet" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('galactic_restlet', 1)">+</button>
+                    </div>
+                </td>
+                <td id="total_restlet">0</td>
+            </tr>
+            <tr>
+                <td>Portlet Script</td>
+                <td>12</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('orbital_portlet', -1)">-</button>
+                        <input type="number" id="orbital_portlet" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('orbital_portlet', 1)">+</button>
+                    </div>
+                </td>
+                <td>18</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('lunar_portlet', -1)">-</button>
+                        <input type="number" id="lunar_portlet" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('lunar_portlet', 1)">+</button>
+                    </div>
+                </td>
+                <td>30</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('galactic_portlet', -1)">-</button>
+                        <input type="number" id="galactic_portlet" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('galactic_portlet', 1)">+</button>
+                    </div>
+                </td>
+                <td id="total_portlet">0</td>
+            </tr>
+            <tr>
+                <td>Workflow Action Script</td>
+                <td>12</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('orbital_workflowAction', -1)">-</button>
+                        <input type="number" id="orbital_workflowAction" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('orbital_workflowAction', 1)">+</button>
+                    </div>
+                </td>
+                <td>20</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('lunar_workflowAction', -1)">-</button>
+                        <input type="number" id="lunar_workflowAction" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('lunar_workflowAction', 1)">+</button>
+                    </div>
+                </td>
+                <td>35</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('galactic_workflowAction', -1)">-</button>
+                        <input type="number" id="galactic_workflowAction" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('galactic_workflowAction', 1)">+</button>
+                    </div>
+                </td>
+                <td id="total_workflowAction">0</td>
+            </tr>
+            <tr>
+                <td>Custom Email Plugin Script</td>
+                <td>12</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('orbital_emailPlugin', -1)">-</button>
+                        <input type="number" id="orbital_emailPlugin" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('orbital_emailPlugin', 1)">+</button>
+                    </div>
+                </td>
+                <td>20</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('lunar_emailPlugin', -1)">-</button>
+                        <input type="number" id="lunar_emailPlugin" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('lunar_emailPlugin', 1)">+</button>
+                    </div>
+                </td>
+                <td>35</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('galactic_emailPlugin', -1)">-</button>
+                        <input type="number" id="galactic_emailPlugin" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('galactic_emailPlugin', 1)">+</button>
+                    </div>
+                </td>
+                <td id="total_emailPlugin">0</td>
+            </tr>
+            <tr>
+                <td>Custom G/L Lines Plugin Script</td>
+                <td>12</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('orbital_glPlugin', -1)">-</button>
+                        <input type="number" id="orbital_glPlugin" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('orbital_glPlugin', 1)">+</button>
+                    </div>
+                </td>
+                <td>20</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('lunar_glPlugin', -1)">-</button>
+                        <input type="number" id="lunar_glPlugin" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('lunar_glPlugin', 1)">+</button>
+                    </div>
+                </td>
+                <td>35</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('galactic_glPlugin', -1)">-</button>
+                        <input type="number" id="galactic_glPlugin" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('galactic_glPlugin', 1)">+</button>
+                    </div>
+                </td>
+                <td id="total_glPlugin">0</td>
+            </tr>
+            <tr>
+                <td>Mass Update Script</td>
+                <td>12</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('orbital_massUpdate', -1)">-</button>
+                        <input type="number" id="orbital_massUpdate" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('orbital_massUpdate', 1)">+</button>
+                    </div>
+                </td>
+                <td>18</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('lunar_massUpdate', -1)">-</button>
+                        <input type="number" id="lunar_massUpdate" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('lunar_massUpdate', 1)">+</button>
+                    </div>
+                </td>
+                <td>30</td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('galactic_massUpdate', -1)">-</button>
+                        <input type="number" id="galactic_massUpdate" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('galactic_massUpdate', 1)">+</button>
+                    </div>
+                </td>
+                <td id="total_massUpdate">0</td>
+            </tr>
+            <tr>
+                <td colspan="8" id="suiteCloudGrandTotal">Grand Total: 0</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>SuiteBuilder x Estimated Hours</h2>
+    <table id="suiteBuilderTable">
+        <thead>
+            <tr>
+                <th>Customization Type</th>
+                <th>Orbital Hours</th>
+                <th>Orbital Qty</th>
+                <th>Lunar Hours</th>
+                <th>Lunar Qty</th>
+                <th>Galactic Hours</th>
+                <th>Galactic Qty</th>
+                <th>Total Hours</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <div class="quantity-container">Workflow</div>
+                </td>
+                <td>
+                    <div class="quantity-container">8</div>
+                </td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('orbital_workflow', -1)">-</button>
+                        <input type="number" id="orbital_workflow" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('orbital_workflow', 1)">+</button>
+                    </div>
+                </td>
+                <td>
+                    <div class="quantity-container">18</div>
+                </td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('lunar_workflow', -1)">-</button>
+                        <input type="number" id="lunar_workflow" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('lunar_workflow', 1)">+</button>
+                    </div>
+                </td>
+                <td>
+                    <div class="quantity-container">30</div>
+                </td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('galactic_workflow', -1)">-</button>
+                        <input type="number" id="galactic_workflow" value="0" min="0" onchange="updateTotals()" />
+                        <button onclick="adjustQty('galactic_workflow', 1)">+</button>
+                    </div>
+                </td>
+                <td>
+                    <div class="quantity-container" id="total_workflow">0</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="quantity-container">Advanced PDF Customization</div>
+                </td>
+                <td>
+                    <div class="quantity-container">10</div>
+                </td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('orbital_advancedPdfCustomization', -1)">-</button>
+                        <input type="number" id="orbital_advancedPdfCustomization" value="0" min="0"
+                            onchange="updateTotals()" />
+                        <button onclick="adjustQty('orbital_advancedPdfCustomization', 1)">+</button>
+                    </div>
+                </td>
+                <td>
+                    <div class="quantity-container">20</div>
+                </td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('lunar_advancedPdfCustomization', -1)">-</button>
+                        <input type="number" id="lunar_advancedPdfCustomization" value="0" min="0"
+                            onchange="updateTotals()" />
+                        <button onclick="adjustQty('lunar_advancedPdfCustomization', 1)">+</button>
+                    </div>
+                </td>
+                <td>
+                    <div class="quantity-container">35</div>
+                </td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('galactic_advancedPdfCustomization', -1)">-</button>
+                        <input type="number" id="galactic_advancedPdfCustomization" value="0" min="0"
+                            onchange="updateTotals()" />
+                        <button onclick="adjustQty('galactic_advancedPdfCustomization', 1)">+</button>
+                    </div>
+                </td>
+                <td>
+                    <div class="quantity-container" id="total_advancedPdfCustomization">0</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="quantity-container">Bundle Installation</div>
+                </td>
+                <td>
+                    <div class="quantity-container">12</div>
+                </td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('orbital_bundleInstallation', -1)">-</button>
+                        <input type="number" id="orbital_bundleInstallation" value="0" min="0"
+                            onchange="updateTotals()" />
+                        <button onclick="adjustQty('orbital_bundleInstallation', 1)">+</button>
+                    </div>
+                </td>
+                <td>
+                    <div class="quantity-container">25</div>
+                </td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('lunar_bundleInstallation', -1)">-</button>
+                        <input type="number" id="lunar_bundleInstallation" value="0" min="0"
+                            onchange="updateTotals()" />
+                        <button onclick="adjustQty('lunar_bundleInstallation', 1)">+</button>
+                    </div>
+                </td>
+                <td>
+                    <div class="quantity-container">40</div>
+                </td>
+                <td>
+                    <div class="quantity-container">
+                        <button onclick="adjustQty('galactic_bundleInstallation', -1)">-</button>
+                        <input type="number" id="galactic_bundleInstallation" value="0" min="0"
+                            onchange="updateTotals()" />
+                        <button onclick="adjustQty('galactic_bundleInstallation', 1)">+</button>
+                    </div>
+                </td>
+                <td>
+                    <div class="quantity-container" id="total_bundleInstallation">0</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="8" id="suiteBuilderGrandTotal">Grand Total: 0</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="container">
+        <h2>Calculated Efforts</h2>
+        <h3 id="combinedGrandTotal">Total Raw Hours: 0</h3>
+        <button onclick="copyTable()">Copy Table</button>
+        <table id="resultsTable">
+            <thead>
+                <tr>
+                    <th>Activity</th>
+                    <th>Effort (Hours)</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr>
+                    <th>Total</th>
+                    <th id="totalEffort">0</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <script>
+        const suiteCloudHours = {
+            clientScript: { orbital: 10, lunar: 20, galactic: 35 },
+            userEvent: { orbital: 10, lunar: 20, galactic: 35 },
+            suitelet: { orbital: 15, lunar: 25, galactic: 37 },
+            scheduledScript: { orbital: 15, lunar: 28, galactic: 40 },
+            mapReduce: { orbital: 18, lunar: 30, galactic: 45 },
+            restlet: { orbital: 20, lunar: 32, galactic: 50 },
+            portlet: { orbital: 12, lunar: 18, galactic: 30 },
+            workflowAction: { orbital: 12, lunar: 20, galactic: 35 },
+            emailPlugin: { orbital: 12, lunar: 20, galactic: 35 },
+            glPlugin: { orbital: 12, lunar: 20, galactic: 35 },
+            massUpdate: { orbital: 12, lunar: 18, galactic: 30 }
+        };
+
+        const suiteBuilderHours = {
+            workflow: { orbital: 8, lunar: 18, galactic: 30 },
+            advancedPdfCustomization: { orbital: 10, lunar: 20, galactic: 35 },
+            bundleInstallation: { orbital: 12, lunar: 25, galactic: 40 }
+        };
+
+        function adjustQty(id, change) {
+            const input = document.getElementById(id);
+            let currentValue = parseInt(input.value) || 0;
+            currentValue = Math.max(0, currentValue + change);
+            input.value = currentValue;
+            updateTotals();
+        }
+
+        function updateTotals() {
+            let totalHours = 0;
+
+            // Calculate SuiteCloud totals
+            for (const id in suiteCloudHours) {
+                const orbitalQty = parseInt(document.getElementById(`orbital_${id}`).value) || 0;
+                const lunarQty = parseInt(document.getElementById(`lunar_${id}`).value) || 0;
+                const galacticQty = parseInt(document.getElementById(`galactic_${id}`).value) || 0;
+
+                const hours = suiteCloudHours[id];
+                const total = (orbitalQty * hours.orbital) + (lunarQty * hours.lunar) + (galacticQty * hours.galactic);
+                document.getElementById(`total_${id}`).textContent = total.toFixed(2);
+                totalHours += total;
+            }
+
+            // Calculate SuiteBuilder totals
+            for (const id in suiteBuilderHours) {
+                const orbitalQty = parseInt(document.getElementById(`orbital_${id}`).value) || 0;
+                const lunarQty = parseInt(document.getElementById(`lunar_${id}`).value) || 0;
+                const galacticQty = parseInt(document.getElementById(`galactic_${id}`).value) || 0;
+
+                const hours = suiteBuilderHours[id];
+                const total = (orbitalQty * hours.orbital) + (lunarQty * hours.lunar) + (galacticQty * hours.galactic);
+                document.getElementById(`total_${id}`).textContent = total.toFixed(2);
+                totalHours += total;
+            }
+
+            // Update the calculated efforts table
+            updateEffortTable(totalHours);
+            calculateGrandTotals();
+        }
+
+        function updateEffortTable(totalHours) {
+            const tableBody = document.getElementById("resultsTable").querySelector("tbody");
+            const totalEffortCell = document.getElementById("totalEffort");
+            tableBody.innerHTML = ""; // Clear previous results
+
+            const activities = [
+                { name: "Research & Design", hours: 1 },
+                { name: "Development", hours: totalHours },
+                { name: "Unit Testing", hours: totalHours * 0.1 },
+                { name: "Deployment to Production", hours: totalHours * 0.05 },
+                { name: "UAT Support", hours: totalHours * 0.1 },
+                { name: "Issue Resolution", hours: totalHours * 0.1 },
+                { name: "Stakeholder Communication", hours: 1 },
+            ];
+
+            let calculatedTotal = 0;
+
+            activities.forEach(activity => {
+                const row = document.createElement("tr");
+                const activityCell = document.createElement("td");
+                activityCell.textContent = activity.name;
+                const hoursCell = document.createElement("td");
+                hoursCell.textContent = activity.hours.toFixed(2);
+                calculatedTotal += activity.hours;
+                row.appendChild(activityCell);
+                row.appendChild(hoursCell);
+                tableBody.appendChild(row);
+            });
+
+            totalEffortCell.textContent = calculatedTotal.toFixed(2);
+        }
+
+        function copyTable() {
+            const table = document.getElementById("resultsTable");
+            const range = document.createRange();
+            range.selectNode(table);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+
+            try {
+                document.execCommand("copy");
+                alert("Table copied to clipboard! You can now paste it into an email.");
+            } catch (err) {
+                alert("Failed to copy the table. Please try again.");
+            }
+
+            selection.removeAllRanges();
+        }
+
+        function calculateGrandTotals() {
+            let suiteCloudTotal = 0;
+            let suiteBuilderTotal = 0;
+
+            // Select all SuiteCloud total elements by their IDs or classes
+            const suiteCloudItems = [
+                "total_clientScript",
+                "total_userEvent",
+                "total_suitelet",
+                "total_scheduledScript",
+                "total_mapReduce",
+                "total_restlet",
+                "total_portlet",
+                "total_workflowAction",
+                "total_emailPlugin",
+                "total_glPlugin",
+                "total_massUpdate"
+            ];
+
+            // Select all SuiteBuilder total elements by their IDs or classes
+            const suiteBuilderItems = [
+                "total_workflow",
+                "total_advancedPdfCustomization",
+                "total_bundleInstallation"
+            ];
+
+            // Calculate SuiteCloud total
+            suiteCloudItems.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    suiteCloudTotal += parseFloat(element.textContent) || 0;
+                }
+            });
+
+            // Calculate SuiteBuilder total
+            suiteBuilderItems.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    suiteBuilderTotal += parseFloat(element.textContent) || 0;
+                }
+            });
+
+            // Calculate combined total
+            const combinedTotal = suiteCloudTotal + suiteBuilderTotal;
+
+            // Display results in the UI
+            document.getElementById("suiteCloudGrandTotal").textContent = "Grand Total: " + suiteCloudTotal.toFixed(2);
+            document.getElementById("suiteBuilderGrandTotal").textContent = "Grand Total: " + suiteBuilderTotal.toFixed(2);
+            document.getElementById("combinedGrandTotal").textContent = "Total Raw Hours: " + combinedTotal.toFixed(2);
+        }
+    </script>
+
+</body>
+
+</html>
